@@ -10,17 +10,18 @@
  */
 package jirc.ui;
 
-import javax.swing.UIManager;
-
+import jirc.protocol.IRCConnection;
 import jirc.protocol.clientevent.ClientEvent;
 import jirc.protocol.clientevent.ClientPrivmsgEvent;
 import jirc.protocol.servereevent.*;
+import jirc.service.ChannelService;
 import jirc.ui.CloseableTabbedPane.CloseableTabbedPane;
-import jirc.protocol.IRCConnection;
 import jirc.ui.CloseableTabbedPane.TabCloseListener;
 import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
+
+import javax.swing.*;
 
 /**
  * @author troels
@@ -45,15 +46,12 @@ public class Form extends javax.swing.JFrame implements Runnable {
 
         //maiby this line is not required?
         AnnotationProcessor.process(this);
-
         c = new IRCConnection();
 
         try {
-
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex) {
-
             System.out.println("SystemLookAndFeel generated exception: " + ex);
         }
 
@@ -74,15 +72,12 @@ public class Form extends javax.swing.JFrame implements Runnable {
             @Override
             public boolean closeTab(int tabIndexToClose) {
 
-                if (tabIndexToClose != tabbedPane.findTab("status")) { // close the tab
-
+                if (tabIndexToClose != tabbedPane.findTab("status")) {
+                    // close the tab
                     EventBus.publish(new ClientEvent("PART " + tabbedPane.getTitleAt(tabIndexToClose)));
-
                     return true;
                 }
-                else {
-                    return false;
-                }
+                return false;
             }
         });
 
@@ -96,7 +91,6 @@ public class Form extends javax.swing.JFrame implements Runnable {
 
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-
                 connectActionPerformed(evt);
             }
         });
@@ -117,7 +111,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
 
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {
 
-        getChannel("status").getTextArea().setText("");
+        updateTab("status", "");
 
         final Form threadContent = this;
 
@@ -144,19 +138,13 @@ public class Form extends javax.swing.JFrame implements Runnable {
         c.connect();
     }
 
-    private ChannelPanel getChannel(String name) {
-
-        return (ChannelPanel) tabbedPane.getComponentAt(tabbedPane.findTab(name));
-    }
-
-    private void updateTab(String channel, String message) {
-        getChannel(channel).getTextArea().append(message + "\n");
+    private void updateTab(String channelName, String message) {
+        ChannelService.getChannel(channelName).getChannelPanel().addText(message + "\n");
     }
 
     // Standard non-filtered server input handling
     @EventSubscriber(eventClass = ServerEvent.class)
     public void onServerEvent(ServerEvent e) {
-
         updateTab("status", e.getResponse().getResponse());
     }
 
@@ -168,14 +156,14 @@ public class Form extends javax.swing.JFrame implements Runnable {
     @EventSubscriber(eventClass = ServerJoinEvent.class)
     public void onServerJoinEvent(ServerJoinEvent e) {
 
-        if (e.getNick().equals(nickname)) { // client joined
-
+        if (e.getNick().equals(nickname)) {
+            // client joined
             tabbedPane.addTab(e.getChannel(), new ChannelPanel(e.getChannel()), true);
         }
-        else { // someone else joined
-
+        else {
+            // someone else joined
             updateTab(e.getChannel(), e.getNick() + " has joined " + e.getChannel());
-            // TODO: needs to update getChannel(e.getChannel()).addUser(e.getNick());
+            // TODO: needs to update getChannelPanel(e.getChannelPanel()).addUser(e.getNick());
         }
     }
 
@@ -190,29 +178,27 @@ public class Form extends javax.swing.JFrame implements Runnable {
         if (e.getNick().equals(nickname)) { // client parted
 
             int index = tabbedPane.findTab(e.getChannel());
-
             tabbedPane.removeTabAt(index);
         }
-        else { // someone else parted
-
+        else {
+            // someone else parted
             updateTab(e.getChannel(), e.getNick() + "has left the channel.");
-            // TODO: needs to update getChannel(e.getChannel()).removeUser(new User(e.getNick()));
+            // TODO: needs to update getChannelPanel(e.getChannelPanel()).removeUser(new User(e.getNick()));
         }
     }
 
     @EventSubscriber(eventClass = ServerQuitEvent.class)
     public void onServerQuitEvent(ServerQuitEvent e) {
 
-        if (e.getNickname().equals(nickname)) { // client quit
-
+        if (e.getNickname().equals(nickname)) {
+            // client quit
             tabbedPane.removeAll();
-
             c.cleanUp();
         }
-        else { // someone else quit
-
+        else {
+            // someone else quit
             updateTab("status", e.getNickname() + " has quit the server.");
-            // TODO: needs to update getChannel("status").removeUser(new User(e.getNickname()));
+            // TODO: needs to update getChannelPanel("status").removeUser(new User(e.getNickname()));
         }
     }
 
@@ -251,13 +237,13 @@ public class Form extends javax.swing.JFrame implements Runnable {
         String channelName = e.getChannel();
         int index = channelName.lastIndexOf("#");
         channelName = channelName.substring(index);
-        ChannelPanel channelPanel = getChannel(channelName);
+        ChannelPanel channelPanel = ChannelService.getChannel(channelName).getChannelPanel();
 
         String[] users = e.getUsers();
 
         for (String user : users) {
 
-           //channelPanel.addUser(user);
+            //channelPanel.addUser(user);
         }
     }
 }

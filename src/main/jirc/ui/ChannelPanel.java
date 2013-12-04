@@ -106,7 +106,7 @@ public class ChannelPanel extends JPanel {
         }
     }
 
-    public IRCTextPane getTextArea() {
-        return textArea;
+    public void addText(String message) {
+        this.textArea.append(message);
     }
 }

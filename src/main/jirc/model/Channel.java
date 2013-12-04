@@ -20,7 +20,7 @@ public class Channel {
         this.channelName = channelName;
     }
 
-    public ChannelPanel getChannel() {
+    public ChannelPanel getChannelPanel() {
         return channel;
     }
 
