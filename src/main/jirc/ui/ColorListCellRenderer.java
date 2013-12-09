@@ -1,45 +1,35 @@
 package jirc.ui;
 
+import jirc.model.ChannelStatus;
+import jirc.service.ChannelService;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class ColorListCellRenderer extends JLabel implements ListCellRenderer {
+public class ColorListCellRenderer extends DefaultListCellRenderer {
 
-    private String match = null;
-    private JList list;
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-    public ColorListCellRenderer(JList list) {
-        setOpaque(true);
-        this.list = list;
-    }
+        ChannelStatus status = ChannelService.getUserStatus((String) value);
+        Color fg;
 
-    public Component getListCellRendererComponent(JList paramlist, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        setText(value.toString());
-        if (value.toString().equals(match)) {
-            setBackground(Color.WHITE);
-            SwingWorker worker = new SwingWorker() {
-                @Override
-                public Object doInBackground() {
-                    try {
-                        Thread.sleep(5000);
-                    }
-                    catch (InterruptedException e) {
-                        /*Who cares*/
-                    }
-                    return null;
-                }
-
-                @Override
-                public void done() {
-                    match = null;
-                    list.repaint();
-                }
-            };
-            worker.execute();
+        switch (status) {
+            case OPERATOR:
+                fg = Color.RED;
+                break;
+            case HALFOPERATOR:
+                fg = Color.YELLOW;
+                break;
+            case VOICE:
+                fg = Color.BLUE;
+                break;
+            default:
+                fg = Color.BLACK;
+                break;
         }
-        else {
-            setBackground(Color.RED);
-        }
+
+        setForeground(fg);
         return this;
     }
 }

@@ -12,5 +12,20 @@ public enum ChannelStatus {
     OPERATOR,
     HALFOPERATOR,
     VOICE,
-    NORMAL
+    NORMAL;
+
+    public int getRank() {
+        switch (this) {
+            case OPERATOR:
+                return 3;
+            case HALFOPERATOR:
+                return 2;
+            case VOICE:
+                return 1;
+            case NORMAL:
+                return 0;
+            default:
+                return 0;
+        }
+    }
 }

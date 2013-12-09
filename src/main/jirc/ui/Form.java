@@ -247,7 +247,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
         else {
             // someone else joined
             ChannelService.message(e.getChannelName(), e.getNick() + " has joined " + e.getChannelName());
-            // TOD""O: needs to update getChannelPanel(e.getChannelPanel()).addUser(e.getNick());
+            ChannelService.getChannel(e.getChannelName()).getChannelPanel().addUserToView(e.getNick());
         }
     }
 
@@ -267,7 +267,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
         else {
             // someone else parted
             ChannelService.message(e.getChannel(), e.getNick() + "has left the channel.");
-            // TODO: needs to update getChannelPanel(e.getChannelPanel()).removeUser(new User(e.getNick()));
+            ChannelService.getChannel(e.getChannel()).getChannelPanel().removeUserFromView(e.getNick());
         }
     }
 
