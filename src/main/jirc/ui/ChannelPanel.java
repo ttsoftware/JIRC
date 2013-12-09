@@ -4,11 +4,10 @@
  */
 package jirc.ui;
 
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.*;
+import jirc.service.InputService;
 
-import jirc.controller.CommandController;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author troels
@@ -18,7 +17,9 @@ public class ChannelPanel extends JPanel {
     private JTextField inputTextField;
     private JSplitPane splitPane;
     private IRCTextPane textArea;
+
     private JList<String> userListView;
+    private DefaultListModel<String> userListModel;
 
     private String channelName;
 
@@ -38,7 +39,9 @@ public class ChannelPanel extends JPanel {
         textArea = new IRCTextPane();
         textArea.setFont(font);
 
-        userListView = new JList<String>();
+        userListModel = new DefaultListModel<String>();
+
+        userListView = new JList<String>(userListModel);
 
         userListView.setFont(font);
         userListView.setBackground(Color.WHITE);
@@ -80,20 +83,20 @@ public class ChannelPanel extends JPanel {
                                 addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).
                                         addComponent(inputTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE).
                                         addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 503, Short.MAX_VALUE)))
-                                .addContainerGap()));
+                                                 .addGroup(layout.createSequentialGroup()
+                                                                   .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 503, Short.MAX_VALUE)))
+                                         .addContainerGap()));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(inputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addContainerGap()));
+                                          .addContainerGap()
+                                          .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE))
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addComponent(inputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                          .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                          .addContainerGap()));
 
     }
 
@@ -101,12 +104,16 @@ public class ChannelPanel extends JPanel {
 
         if (!"".equals(inputTextField.getText())) {
 
-            CommandController ci = new CommandController(inputTextField.getText(), channelName);
+            InputService.interpret(inputTextField.getText(), channelName);
             inputTextField.setText("");
         }
     }
 
-    public void addText(String message) {
-        this.textArea.append(message);
+    public void appendMessage(String message) {
+        textArea.append(message);
+    }
+
+    public void addUserToView(String username) {
+        userListModel.addElement(username);
     }
 }

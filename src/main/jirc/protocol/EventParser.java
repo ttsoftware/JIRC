@@ -4,15 +4,9 @@
  */
 package jirc.protocol;
 
-import jirc.protocol.servereevent.ServerJoinEvent;
+import jirc.protocol.servereevent.*;
 import org.bushe.swing.event.EventBus;
-import jirc.protocol.servereevent.ServerEvent;
 import jirc.protocol.clientevent.ClientEvent;
-import jirc.protocol.servereevent.ServerNoticeEvent;
-import jirc.protocol.servereevent.ServerPartEvent;
-import jirc.protocol.servereevent.ServerUsersEvent;
-import jirc.protocol.servereevent.ServerPrivmsgEvent;
-import jirc.protocol.servereevent.ServerQuitEvent;
 
 /**
  *
@@ -61,6 +55,11 @@ public class EventParser {
 
             case "470":
                 // forwarding to another channel
+                break;
+
+            case "473":
+                // forwarding to another channel
+                EventBus.publish(new ServerInviteOnlyEvent(response.getChannel()));
                 break;
 
             case "QUIT":

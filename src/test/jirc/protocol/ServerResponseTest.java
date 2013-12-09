@@ -7,6 +7,21 @@ import static org.junit.Assert.assertEquals;
 public class ServerResponseTest {
 
     @Test
+    public void testParseResponse473() {
+        String test = ":hubbard.freenode.net 473 jirctest #java :Cannot join channel (+i) - you must be invited";
+
+        ServerResponse response12 = new ServerResponse(test);
+
+        assertEquals(response12.getEvent(), "473");
+        assertEquals(response12.getUsername(), null);
+        assertEquals(response12.getClient(), "hubbard.freenode.net");
+        assertEquals(response12.getChannel(), "#java");
+        assertEquals(response12.getAffectedUser(), "jirctest");
+        assertEquals(response12.getAffectedChannel(), null);
+        assertEquals(response12.getParameter(), "Cannot join channel (+i) - you must be invited");
+    }
+
+    @Test
     public void testParseResponse00X() {
         // Test welcome message
 
@@ -141,7 +156,7 @@ public class ServerResponseTest {
         assertEquals(response12.getUsername(), "sizzurp");
         assertEquals(response12.getClient(), "sizzurp!~qwebirc@Swift-F885C78D.dhcp.stcd.mn.charter.com");
         assertEquals(response12.getChannel(), "#irchelp");
-        assertEquals(response12.getParameter(), "");
+        assertEquals(response12.getParameter(), null);
     }
 
     @Test
@@ -167,6 +182,20 @@ public class ServerResponseTest {
         assertEquals(response.getChannel(), "status");
         assertEquals(response.getAffectedUser(), "ssdf");
         assertEquals(response.getParameter(), "[Logon News - Oct 24 2010] There have been several attempts recently by someone pre");
+
+        String test5 = ":ChanServ!ChanServ@services. NOTICE jirctest :[#freenode] Welcome to #freenode. " +
+                       "All network staff are voiced in here, but may not always be around - " +
+                       "type /stats p to get a list of on call staff. Others may be hiding so do feel free to ping and /msg us at will! " +
+                       "Also please read the channel guidelines at http://freenode.net/poundfreenode.shtml - thanks.";
+
+        ServerResponse response1 = new ServerResponse(test5);
+
+        assertEquals(response1.getEvent(), "NOTICE");
+        assertEquals(response1.getUsername(), "ChanServ");
+        assertEquals(response1.getClient(), "ChanServ!ChanServ@services.");
+        assertEquals(response1.getChannel(), "#freenode");
+        assertEquals(response1.getAffectedUser(), "jirctest");
+        assertEquals(response1.getParameter(), "[#freenode] Welcome to #freenode. All network staff are voiced in here, but may not always be around - type /stats p to get a list of on call staff. Others may be hiding so do feel free to ping and /msg us at will! Also please read the channel guidelines at http://freenode.net/poundfreenode.shtml - thanks.");
     }
 
     @Test

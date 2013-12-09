@@ -2,14 +2,21 @@ package jirc.model;
 
 import jirc.ui.ChannelPanel;
 
-public class Channel {
+import java.io.Serializable;
+
+public class Channel implements Serializable {
 
     private String channelName;
-    private ChannelPanel channel;
+    private ChannelPanel panel;
 
-    public Channel(String channelName, ChannelPanel channel) {
+    public Channel(String channelName, ChannelPanel panel) {
         this.channelName = channelName;
-        this.channel = channel;
+        this.panel = panel;
+    }
+
+    public Channel(String channelName) {
+        this.channelName = channelName;
+        this.panel = new ChannelPanel(channelName);
     }
 
     public String getChannelName() {
@@ -21,10 +28,10 @@ public class Channel {
     }
 
     public ChannelPanel getChannelPanel() {
-        return channel;
+        return panel;
     }
 
-    public void setChannel(ChannelPanel channel) {
-        this.channel = channel;
+    public void setPanel(ChannelPanel panel) {
+        this.panel = panel;
     }
 }

@@ -10,6 +10,7 @@
  */
 package jirc.ui;
 
+import jirc.model.Channel;
 import jirc.protocol.IRCConnection;
 import jirc.protocol.clientevent.ClientEvent;
 import jirc.protocol.clientevent.ClientPrivmsgEvent;
@@ -61,10 +62,10 @@ public class Form extends javax.swing.JFrame implements Runnable {
     private void initComponents() {
 
         connect = new javax.swing.JButton();
-        usernameField = new javax.swing.JTextField();
-        nicknameLabel = new javax.swing.JLabel();
-        passwordField = new javax.swing.JPasswordField();
-        passwordlabel = new javax.swing.JLabel();
+        usernameField = new javax.swing.JTextField("jirctest");
+        nicknameLabel = new javax.swing.JLabel("Username");
+        passwordField = new javax.swing.JPasswordField("nothing");
+        passwordlabel = new javax.swing.JLabel("Password");
 
         tabbedPane = new CloseableTabbedPane();
         tabbedPane.addTabCloseListener(new TabCloseListener() {
@@ -81,7 +82,10 @@ public class Form extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        tabbedPane.addTab("status", new ChannelPanel("status"), false);
+
+        Channel status = ChannelService.addChannel("status");
+
+        tabbedPane.addTab("status", status.getChannelPanel(), false);
         tabbedPane.setSelectedIndex(0);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -95,23 +99,106 @@ public class Form extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        nicknameLabel.setText("Username");
-        passwordlabel.setText("Password");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE).addGroup(layout.createSequentialGroup().addComponent(nicknameLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(passwordlabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 160, Short.MAX_VALUE)).addGroup(layout.createSequentialGroup().addComponent(connect, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 503, Short.MAX_VALUE))).addContainerGap()));
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(
+                                layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(
+                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(
+                                                                tabbedPane,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                608,
+                                                                Short.MAX_VALUE
+                                                        )
+                                                        .addGroup(
+                                                                layout.createSequentialGroup()
+                                                                        .addComponent(nicknameLabel)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(
+                                                                                usernameField,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                147,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE
+                                                                        )
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(passwordlabel)
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(
+                                                                                passwordField,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                153,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE
+                                                                        )
+                                                                        .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                160,
+                                                                                Short.MAX_VALUE
+                                                                        )
+                                                        )
+                                                        .addGroup(
+                                                                layout.createSequentialGroup()
+                                                                        .addComponent(
+                                                                                connect,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                105,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE
+                                                                        )
+                                                                        .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                503,
+                                                                                Short.MAX_VALUE
+                                                                        )
+                                                        )
+                                        )
+                                        .addContainerGap()
+                        )
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(nicknameLabel).addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(passwordlabel).addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(connect).addContainerGap()));
-
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(
+                                layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(
+                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(nicknameLabel)
+                                                        .addComponent(
+                                                                usernameField,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE
+                                                        )
+                                                        .addComponent(passwordlabel)
+                                                        .addComponent(
+                                                                passwordField,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE
+                                                        )
+                                        )
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(
+                                                tabbedPane,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                260,
+                                                Short.MAX_VALUE
+                                        )
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(connect)
+                                        .addContainerGap()
+                        )
+        );
 
         pack();
     }
 
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {
 
-        updateTab("status", "");
+        ChannelService.message("status", "");
 
         final Form threadContent = this;
 
@@ -138,14 +225,10 @@ public class Form extends javax.swing.JFrame implements Runnable {
         c.connect();
     }
 
-    private void updateTab(String channelName, String message) {
-        ChannelService.getChannel(channelName).getChannelPanel().addText(message + "\n");
-    }
-
     // Standard non-filtered server input handling
     @EventSubscriber(eventClass = ServerEvent.class)
     public void onServerEvent(ServerEvent e) {
-        updateTab("status", e.getResponse().getResponse());
+        ChannelService.message("status", e.getResponse().getResponse());
     }
 
     /* 
@@ -158,12 +241,13 @@ public class Form extends javax.swing.JFrame implements Runnable {
 
         if (e.getNick().equals(nickname)) {
             // client joined
-            tabbedPane.addTab(e.getChannel(), new ChannelPanel(e.getChannel()), true);
+            Channel channel = ChannelService.addChannel(e.getChannelName());
+            tabbedPane.addTab(e.getChannelName(), channel.getChannelPanel(), true);
         }
         else {
             // someone else joined
-            updateTab(e.getChannel(), e.getNick() + " has joined " + e.getChannel());
-            // TODO: needs to update getChannelPanel(e.getChannelPanel()).addUser(e.getNick());
+            ChannelService.message(e.getChannelName(), e.getNick() + " has joined " + e.getChannelName());
+            // TOD""O: needs to update getChannelPanel(e.getChannelPanel()).addUser(e.getNick());
         }
     }
 
@@ -182,7 +266,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
         }
         else {
             // someone else parted
-            updateTab(e.getChannel(), e.getNick() + "has left the channel.");
+            ChannelService.message(e.getChannel(), e.getNick() + "has left the channel.");
             // TODO: needs to update getChannelPanel(e.getChannelPanel()).removeUser(new User(e.getNick()));
         }
     }
@@ -197,7 +281,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
         }
         else {
             // someone else quit
-            updateTab("status", e.getNickname() + " has quit the server.");
+            ChannelService.message("status", e.getNickname() + " has quit the server.");
             // TODO: needs to update getChannelPanel("status").removeUser(new User(e.getNickname()));
         }
     }
@@ -205,7 +289,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
     @EventSubscriber(eventClass = ServerPrivmsgEvent.class)
     public void onServerPrivmsgEvent(ServerPrivmsgEvent e) {
 
-        updateTab(e.getChannel(), "" + e.getUser() + ": " + e.getMessage());
+        ChannelService.message(e.getChannel(), "" + e.getUser() + ": " + e.getMessage());
     }
 
     // A notice to client
@@ -213,7 +297,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
     public void onServerNoticeEvent(ServerNoticeEvent e) {
         // We need to know the currently focused tab
         // e.getNick is not the username
-        updateTab(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()), "Notice from " + e.getNick() + ": " + e.getMessage());
+        ChannelService.message(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()), "Notice from " + e.getNick() + ": " + e.getMessage());
     }
 
     // any kind of input to server, which is not PRIVMSG
@@ -228,22 +312,23 @@ public class Form extends javax.swing.JFrame implements Runnable {
     public void onClientPrivmsgEvent(ClientPrivmsgEvent e) {
 
         c.doServerCall("PRIVMSG " + e.getChannel() + " :" + e.getMessage());
-        updateTab(e.getChannel(), nickname + ": " + e.getMessage());
+        ChannelService.message(e.getChannel(), nickname + ": " + e.getMessage());
+    }
+
+    @EventSubscriber(eventClass = ServerInviteOnlyEvent.class)
+    public void onServerInviteOnlyEvent(ServerInviteOnlyEvent e) {
+
+        ChannelService.message(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()), e.getChannelName()  + " has invite only mode set (+i), and cannot be joined.");
     }
 
     @EventSubscriber(eventClass = ServerUsersEvent.class)
     public void onServerUsersEvent(ServerUsersEvent e) {
 
         String channelName = e.getChannel();
-        int index = channelName.lastIndexOf("#");
-        channelName = channelName.substring(index);
-        ChannelPanel channelPanel = ChannelService.getChannel(channelName).getChannelPanel();
-
         String[] users = e.getUsers();
 
         for (String user : users) {
-
-            //channelPanel.addUser(user);
+            ChannelService.addUser(user, channelName);
         }
     }
 }

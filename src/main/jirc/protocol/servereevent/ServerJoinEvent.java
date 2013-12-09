@@ -11,21 +11,21 @@ package jirc.protocol.servereevent;
  */
 public class ServerJoinEvent {
 
-    private String channel;
+    private String channelName;
     private String nick;
 
-    public ServerJoinEvent(String channel, String nick) {
+    public ServerJoinEvent(String channelName, String nick) {
         
-        this.channel = channel;
+        this.channelName = channelName;
         this.nick = nick;
     }
 
-    public String getChannel() {
-        return channel;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setChannel(String channel) {
-        this.channel = channel;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 
     public String getNick() {

@@ -1,8 +1,9 @@
 package jirc.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class User {
+public class User implements Serializable {
 
     private String username;
     private HashMap<Channel, ChannelStatus> channels;
@@ -29,7 +30,7 @@ public class User {
     }
 
     public void addChannel(Channel channel, ChannelStatus status) {
-        this.channels.put(channel, status);
+        channels.put(channel, status);
     }
 
     public void setChannels(HashMap<Channel, ChannelStatus> channels) {

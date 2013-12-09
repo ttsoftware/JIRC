@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package jirc.controller;
+package jirc.service;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -15,17 +15,11 @@ import jirc.protocol.clientevent.ClientPrivmsgEvent;
  *
  * @author troels
  */
-public class CommandController {
+public class InputService {
 
-    String input;
-    String[] commands = {"join", "msg"};
-    
-    public CommandController(String input, String channelName) {
-        
-        interpret(input, channelName);
-    }
-    
-    private void interpret(String input, String channelName) {
+    static String[] commands = {"join", "msg"};
+
+    public static void interpret(String input, String channelName) {
         
         if (input.startsWith("/")) {
             
@@ -37,7 +31,6 @@ public class CommandController {
                 String command = tokens[0];
                 
                 if (set.contains(tokens[0])) {
-                    
                     if (command.toLowerCase().equals("join")) {
                         
                         EventBus.publish(new ClientEvent("JOIN " + tokens[1]));

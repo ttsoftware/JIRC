@@ -85,10 +85,11 @@ public class ServerResponse {
         /**
          * Group 1 = 'parameter' - everything after the last ':'.
          */
-        Pattern parameterPattern = Pattern.compile(":.*:(.+?$|)");
+        Pattern parameterPattern = Pattern.compile("^:[^:]+:(.+?)$");
         Matcher parameterMatcher = parameterPattern.matcher(response);
 
         if (parameterMatcher.find()) {
+
             this.parameter = parameterMatcher.group(1);
         }
     }

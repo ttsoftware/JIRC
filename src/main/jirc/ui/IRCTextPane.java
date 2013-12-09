@@ -40,11 +40,9 @@ public class IRCTextPane extends JTextPane {
     public void append(String s) {
 
         try {
-
             editor.insertHTML(doc, doc.getLength(), toHtml(s), 0, 0, Tag.SPAN);
         }
         catch (Exception ex) {
-
             ex.printStackTrace();
         }
     }
