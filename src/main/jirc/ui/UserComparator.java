@@ -21,8 +21,13 @@ public class UserComparator implements Comparator<String> {
         ChannelStatus status2 = ChannelService.getUserStatus(username2);
 
         if (status1.getRank() > status2.getRank()) {
-            return status1.getRank();
+            return 0;
         }
-        return status2.getRank();
+        else if (status1.getRank() == status2.getRank()) {
+            if (username1.compareToIgnoreCase(username2) < 0) {
+                return 0;
+            }
+        }
+        return 1;
     }
 }

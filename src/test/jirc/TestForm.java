@@ -9,6 +9,8 @@ package jirc;/*
  * Created on May 9, 2011, 3:08:44 PM
  */
 
+import jirc.ui.IRCTextPane;
+
 /**
  *
  * @author troels
@@ -24,13 +26,19 @@ public class TestForm extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        IRCTextPane pane = new IRCTextPane();
+
+        String test = "";
+
+        pane.append(test);
+
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(null);
-        jSplitPane1.setRightComponent(jPanel1);
+        jSplitPane1.setRightComponent(pane);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

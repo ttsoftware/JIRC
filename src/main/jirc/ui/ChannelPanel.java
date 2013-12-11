@@ -16,10 +16,7 @@ import java.awt.*;
 public class ChannelPanel extends JPanel {
 
     private JTextField inputTextField;
-    private JSplitPane splitPane;
     private IRCTextPane textArea;
-
-    private JXList userListView;
     private DefaultListModel<String> userListModel;
 
     private String channelName;
@@ -35,7 +32,7 @@ public class ChannelPanel extends JPanel {
         Font font = new Font("Monospaced", 0, 12);
 
         inputTextField = new javax.swing.JTextField();
-        splitPane = new javax.swing.JSplitPane();
+        JSplitPane splitPane = new JSplitPane();
         JScrollPane textAreaScrollPane = new JScrollPane();
         textArea = new IRCTextPane();
         textArea.setFont(font);
@@ -43,7 +40,7 @@ public class ChannelPanel extends JPanel {
         ColorListCellRenderer renderer = new ColorListCellRenderer();
 
         userListModel = new DefaultListModel<String>();
-        userListView = new JXList(userListModel);
+        JXList userListView = new JXList(userListModel);
 
         userListView.setComparator(new UserComparator());
         userListView.setAutoCreateRowSorter(true);

@@ -198,7 +198,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
 
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {
 
-        ChannelService.message("status", "");
+        ChannelService.appendMessage("status", "");
 
         final Form threadContent = this;
 
@@ -228,7 +228,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
     // Standard non-filtered server input handling
     @EventSubscriber(eventClass = ServerEvent.class)
     public void onServerEvent(ServerEvent e) {
-        ChannelService.message("status", e.getResponse().getResponse());
+        ChannelService.appendMessage("status", e.getResponse().getResponse());
     }
 
     /* 
@@ -246,7 +246,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
         }
         else {
             // someone else joined
-            ChannelService.message(e.getChannelName(), e.getNick() + " has joined " + e.getChannelName());
+            ChannelService.appendMessage(e.getChannelName(), e.getNick() + " has joined " + e.getChannelName());
             ChannelService.getChannel(e.getChannelName()).getChannelPanel().addUserToView(e.getNick());
         }
     }
@@ -266,7 +266,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
         }
         else {
             // someone else parted
-            ChannelService.message(e.getChannel(), e.getNick() + "has left the channel.");
+            ChannelService.appendMessage(e.getChannel(), e.getNick() + "has left the channel.");
             ChannelService.getChannel(e.getChannel()).getChannelPanel().removeUserFromView(e.getNick());
         }
     }
@@ -281,15 +281,14 @@ public class Form extends javax.swing.JFrame implements Runnable {
         }
         else {
             // someone else quit
-            ChannelService.message("status", e.getNickname() + " has quit the server.");
+            ChannelService.appendMessage("status", e.getNickname() + " has quit the server.");
             // TODO: needs to update getChannelPanel("status").removeUser(new User(e.getNickname()));
         }
     }
 
     @EventSubscriber(eventClass = ServerPrivmsgEvent.class)
     public void onServerPrivmsgEvent(ServerPrivmsgEvent e) {
-
-        ChannelService.message(e.getChannel(), "" + e.getUser() + ": " + e.getMessage());
+        ChannelService.appendMessage(e.getChannel(), e.getUser() + ": " + e.getMessage());
     }
 
     // A notice to client
@@ -297,28 +296,26 @@ public class Form extends javax.swing.JFrame implements Runnable {
     public void onServerNoticeEvent(ServerNoticeEvent e) {
         // We need to know the currently focused tab
         // e.getNick is not the username
-        ChannelService.message(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()), "Notice from " + e.getNick() + ": " + e.getMessage());
+        ChannelService.appendMessage(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()), "Notice from " + e.getNick() + ": " + e.getMessage());
     }
 
     // any kind of input to server, which is not PRIVMSG
     @EventSubscriber(eventClass = ClientEvent.class)
     public void onClientEvent(ClientEvent e) {
-
         c.doServerCall(e.getRequest());
     }
 
     //handling of both server and client PRIVMSG
     @EventSubscriber(eventClass = ClientPrivmsgEvent.class)
     public void onClientPrivmsgEvent(ClientPrivmsgEvent e) {
-
         c.doServerCall("PRIVMSG " + e.getChannel() + " :" + e.getMessage());
-        ChannelService.message(e.getChannel(), nickname + ": " + e.getMessage());
+        ChannelService.appendMessage(e.getChannel(), nickname + ": " + e.getMessage());
     }
 
     @EventSubscriber(eventClass = ServerInviteOnlyEvent.class)
     public void onServerInviteOnlyEvent(ServerInviteOnlyEvent e) {
 
-        ChannelService.message(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()), e.getChannelName()  + " has invite only mode set (+i), and cannot be joined.");
+        ChannelService.appendMessage(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()), e.getChannelName() + " has invite only mode set (+i), and cannot be joined.");
     }
 
     @EventSubscriber(eventClass = ServerUsersEvent.class)

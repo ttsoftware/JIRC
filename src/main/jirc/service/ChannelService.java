@@ -10,12 +10,12 @@ public class ChannelService {
 
     final private static HashMap<String, Channel> channels = new HashMap<>();
 
-    public static void message(String channelName, String message) {
+    public static void appendMessage(String channelName, String message) {
         Channel channel = getChannel(channelName);
         channel.getChannelPanel().appendMessage(message + "\n");
     }
 
-    public static void message(Channel channel, String message) {
+    public static void appendMessage(Channel channel, String message) {
         channel.getChannelPanel().appendMessage(message + "\n");
     }
 

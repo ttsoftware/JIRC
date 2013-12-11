@@ -125,6 +125,6 @@ public class IRCTextPane extends JTextPane {
             output = input;
         }
 
-        return "<span>" + output + "</span></span><br />";
+        return "<span>" + output.trim() + "</span></span><br/>";
     }
 }

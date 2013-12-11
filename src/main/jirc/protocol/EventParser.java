@@ -36,7 +36,7 @@ public class EventParser {
                 break;
 
             case "332":
-                // channel welcome message
+                // channel welcome appendMessage
                 break;
 
             case "333":

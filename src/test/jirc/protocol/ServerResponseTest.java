@@ -23,7 +23,7 @@ public class ServerResponseTest {
 
     @Test
     public void testParseResponse00X() {
-        // Test welcome message
+        // Test welcome appendMessage
 
         String test8 = ":zelazny.freenode.net 001 test :Welcome to the freenode Internet Relay Chat Network test";
         String test9 = ":zelazny.freenode.net 002 test :Your host is zelazny.freenode.net[140.211.167.106/6667], running version ircd-seven-1.1.3";
