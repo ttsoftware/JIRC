@@ -11,7 +11,7 @@ public class ColorListCellRenderer extends DefaultListCellRenderer {
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-        ChannelStatus status = ChannelService.getUserStatus((String) value);
+        ChannelStatus status = ChannelService.getChannelStatus((String) value);
         Color fg;
 
         switch (status) {

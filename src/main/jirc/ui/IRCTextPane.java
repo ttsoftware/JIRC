@@ -21,7 +21,7 @@ public class IRCTextPane extends JTextPane {
 
     HTMLDocument doc;
     HTMLEditorKit editor;
-    String c[] = {"FFF", "000", "00007F", "009000", "FF0000", "7F0000", "9F009F", "FF7F00", "FFFF00", "00F800", "00908F", "00FFFF", "0000FF", "FF00FF", "7F7F7F", "CFD0CF"};
+    String colors[] = {"FFF", "000", "00007F", "009000", "FF0000", "7F0000", "9F009F", "FF7F00", "FFFF00", "00F800", "00908F", "00FFFF", "0000FF", "FF00FF", "7F7F7F", "CFD0CF"};
 
     public IRCTextPane() {
 
@@ -52,50 +52,55 @@ public class IRCTextPane extends JTextPane {
         String output = null;
         
         // match both background and foreground
-        Pattern match_1 = Pattern.compile("\\x03(\\d\\d?),(\\d\\d?)(.*?)(?:(?=\\x03)|$)");
+        Pattern match_1 = Pattern.compile(0x03 + "(\\d\\d?),(\\d\\d?)(.*?)(?:(?="+ 0x03 +")|$)");
         Matcher matcher_1 = match_1.matcher(input);
 
         while (matcher_1.find()) {
-
-            output = matcher_1.replaceFirst(
-                    "</span><span style=\"color: #"
-                    + c[Integer.parseInt(matcher_1.group(1))]
-                    + "; background-color: #"
-                    + c[Integer.parseInt(matcher_1.group(2))]
-                    + ";\">" + matcher_1.group(3));
-            input = output;
-            matcher_1 = match_1.matcher(input);
+            int fgColorIndex = Integer.parseInt(matcher_1.group(1));
+            int bgColorIndex = Integer.parseInt(matcher_1.group(2));
+            if (fgColorIndex < colors.length && bgColorIndex < colors.length) {
+                output = matcher_1.replaceFirst(
+                        "</span><span style=\"color: #"
+                        + colors[fgColorIndex]
+                        + "; background-color: #"
+                        + colors[bgColorIndex]
+                        + ";\">" + matcher_1.group(3));
+                input = output;
+                matcher_1 = match_1.matcher(input);
+            }
         }
 
         // match foreground
-        Pattern match_2 = Pattern.compile("\\x03(\\d\\d?)(.*?)(?:(?=\\x03)|$)");
+        Pattern match_2 = Pattern.compile(0x03 + "(\\d\\d?)(.*?)(?:(?=" + 0x03 + ")|$)");
         Matcher matcher_2 = match_2.matcher(input);
 
         while (matcher_2.find()) {
+            int colorIndex = Integer.parseInt(matcher_2.group(1));
+            if (colorIndex < colors.length) {
 
-            output = matcher_2.replaceFirst(
-                    "</span><span style=\"color: #"
-                    + c[Integer.parseInt(matcher_2.group(1))]
-                    + ";\">"
-                    + matcher_2.group(2));
+                output = matcher_2.replaceFirst(
+                        "</span><span style=\"color: #"
+                        + colors[colorIndex]
+                + ";\">"
+                + matcher_2.group(2));
 
-            input = output;
-            matcher_2 = match_2.matcher(input);
+                input = output;
+                matcher_2 = match_2.matcher(input);
+            }
         }
 
         // match no color
-        Pattern match_6 = Pattern.compile("\\x03(\\D?)");
+        Pattern match_6 = Pattern.compile(0x03 + "(\\D?)");
         Matcher matcher_6 = match_6.matcher(input);
 
         while (matcher_6.find()) {
-
             output = matcher_6.replaceFirst("</span> ");
             input = output;
             matcher_6 = match_6.matcher(input);
         }
         
         // match bold text
-        Pattern match_4 = Pattern.compile("\\x02(.*?)(?:(?=\\x02)\\x02|$)");
+        Pattern match_4 = Pattern.compile(0x02 + "(.*?)(?:(?=" + 0x02 + ")" + 0x02 + "|$)");
         Matcher matcher_4 = match_4.matcher(input);
 
         while (matcher_4.find()) {

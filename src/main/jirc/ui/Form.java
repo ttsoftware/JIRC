@@ -85,7 +85,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
 
         Channel status = ChannelService.addChannel("status");
 
-        tabbedPane.addTab("status", status.getChannelPanel(), false);
+        tabbedPane.addTab("status", status.getPanel(), false);
         tabbedPane.setSelectedIndex(0);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -242,12 +242,12 @@ public class Form extends javax.swing.JFrame implements Runnable {
         if (e.getNick().equals(nickname)) {
             // client joined
             Channel channel = ChannelService.addChannel(e.getChannelName());
-            tabbedPane.addTab(e.getChannelName(), channel.getChannelPanel(), true);
+            tabbedPane.addTab(e.getChannelName(), channel.getPanel(), true);
         }
         else {
             // someone else joined
             ChannelService.appendMessage(e.getChannelName(), e.getNick() + " has joined " + e.getChannelName());
-            ChannelService.getChannel(e.getChannelName()).getChannelPanel().addUserToView(e.getNick());
+            ChannelService.getChannel(e.getChannelName()).getPanel().addUserToView(e.getNick());
         }
     }
 
@@ -266,8 +266,8 @@ public class Form extends javax.swing.JFrame implements Runnable {
         }
         else {
             // someone else parted
-            ChannelService.appendMessage(e.getChannel(), e.getNick() + "has left the channel.");
-            ChannelService.getChannel(e.getChannel()).getChannelPanel().removeUserFromView(e.getNick());
+            ChannelService.appendMessage(e.getChannel(), e.getNick() + " has left the channel.");
+            ChannelService.removeUser(e.getNick(), e.getChannel());
         }
     }
 
@@ -282,13 +282,13 @@ public class Form extends javax.swing.JFrame implements Runnable {
         else {
             // someone else quit
             ChannelService.appendMessage("status", e.getNickname() + " has quit the server.");
-            // TODO: needs to update getChannelPanel("status").removeUser(new User(e.getNickname()));
+            ChannelService.removeFromAllChannels(e.getNickname());
         }
     }
 
     @EventSubscriber(eventClass = ServerPrivmsgEvent.class)
     public void onServerPrivmsgEvent(ServerPrivmsgEvent e) {
-        ChannelService.appendMessage(e.getChannel(), e.getUser() + ": " + e.getMessage());
+        ChannelService.appendMessage(e.getChannel(), e.getUser(), e.getMessage());
     }
 
     // A notice to client
@@ -309,7 +309,7 @@ public class Form extends javax.swing.JFrame implements Runnable {
     @EventSubscriber(eventClass = ClientPrivmsgEvent.class)
     public void onClientPrivmsgEvent(ClientPrivmsgEvent e) {
         c.doServerCall("PRIVMSG " + e.getChannel() + " :" + e.getMessage());
-        ChannelService.appendMessage(e.getChannel(), nickname + ": " + e.getMessage());
+        ChannelService.appendMessage(e.getChannel(), nickname, e.getMessage());
     }
 
     @EventSubscriber(eventClass = ServerInviteOnlyEvent.class)

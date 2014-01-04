@@ -2,21 +2,29 @@ package jirc.service;
 
 import jirc.model.Channel;
 import jirc.model.ChannelStatus;
-import jirc.model.User;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ChannelService {
 
     final private static HashMap<String, Channel> channels = new HashMap<>();
 
+    public static void appendMessage(String channelName, String username, String message) {
+        Channel channel = getChannel(channelName);
+
+        System.out.println(getNameColor(username, channel));
+
+        appendMessage(channel, getNameColor(username, channel) + ": " + message);
+    }
+
     public static void appendMessage(String channelName, String message) {
         Channel channel = getChannel(channelName);
-        channel.getChannelPanel().appendMessage(message + "\n");
+        appendMessage(channel, message);
     }
 
     public static void appendMessage(Channel channel, String message) {
-        channel.getChannelPanel().appendMessage(message + "\n");
+        channel.getPanel().appendMessage(message + "\n");
     }
 
     public static Channel getChannel(String channelName) {
@@ -29,12 +37,27 @@ public class ChannelService {
 
     public static void addUser(String username, String channelName) {
         Channel channel = getChannel(channelName);
-        ChannelStatus status = getUserStatus(username);
+        ChannelStatus status = getChannelStatus(username);
 
         if (channel != null &&
             status != null) {
 
-            channel.getChannelPanel().addUserToView(username);
+            channel.getPanel().addUserToView(username);
+            channel.setUser(username, status);
+        }
+    }
+
+    public static void removeUser(String username, String channelName) {
+        Channel channel = getChannel(channelName);
+        channel.getPanel().removeUserFromView(username);
+        channel.removeUser(username);
+    }
+
+    public static void removeFromAllChannels(String username) {
+        for (Map.Entry<String, Channel> entry : ChannelService.channels.entrySet()) {
+            Channel channel = entry.getValue();
+            channel.getPanel().removeUserFromView(username);
+            channel.removeUser(username);
         }
     }
 
@@ -44,7 +67,29 @@ public class ChannelService {
         return channel;
     }
 
-    public static ChannelStatus getUserStatus(String username) {
+    public static String getNameColor(String username, Channel channel) {
+        ChannelStatus status = channel.getUserStatus(username);
+        char color = 0x01;
+
+        if (status != null) {
+            switch (status) {
+                case OPERATOR:
+                    color = 0x04;
+                    break;
+                case HALFOPERATOR:
+                    color = 0x08;
+                    break;
+                case VOICE:
+                    color = 0x0C;
+                    break;
+            }
+        }
+
+        return 0x03 + "" + color + "" + username + 0x03;
+        //return 0x02 + username + 0x02;
+    }
+
+    public static ChannelStatus getChannelStatus(String username) {
 
         String ident = username.substring(0, 1);
 

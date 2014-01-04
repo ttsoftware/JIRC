@@ -156,6 +156,9 @@ public class ChannelPanel extends JPanel {
     }
 
     public void removeUserFromView(String username) {
-        userListModel.removeElement(username);
+        // only remove if user exist.
+        if (userListModel.contains(username)) {
+            userListModel.removeElement(username);
+        }
     }
 }
