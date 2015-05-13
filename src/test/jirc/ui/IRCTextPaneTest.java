@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class IRCTextPaneText {
+public class IRCTextPaneTest {
 
     @Test
     public void testToHTML() {
